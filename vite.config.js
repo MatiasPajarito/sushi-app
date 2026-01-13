@@ -7,6 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Agregamos los nombres exactos de tus archivos en public
       includeAssets: ['favicon.ico', 'pwa-192x192.png', 'pwa-512x512.png'],
       manifest: {
         name: 'Oishii Sushi - Pedidos Online',
@@ -15,14 +16,11 @@ export default defineConfig({
         theme_color: '#001a3d',
         background_color: '#000d1a',
         display: 'standalone',
-        
-        // CAMBIO AQUÍ: En Vercel usamos la raíz
-        scope: '/', 
-        start_url: '/', 
-        
+        scope: '/',
+        start_url: '/',
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: 'pwa-192x192.png', // Debe existir en tu carpeta public
             sizes: '192x192',
             type: 'image/png'
           },
@@ -35,12 +33,12 @@ export default defineConfig({
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any maskable' // Clave para que el icono se vea bien en Android
           }
         ]
       }
     })
   ],
-  // CAMBIO AQUÍ: Esto elimina el error 404 en Vercel
+  // CRÍTICO: En Vercel siempre debe ser la raíz '/'
   base: '/', 
 })

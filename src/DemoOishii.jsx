@@ -39,7 +39,7 @@ export default function DemoOishii() {
   const [busqueda, setBusqueda] = useState('');
   const [filtroTipo, setFiltroTipo] = useState('Todos');
 
-  // --- 3. EFECTOS ---
+  // --- 3. EFECTOS DE SINCRONIZACIÓN ---
   useEffect(() => { localStorage.setItem('tema_oishii', JSON.stringify(darkMode)); }, [darkMode]);
   useEffect(() => { localStorage.setItem('carrito_oishii', JSON.stringify(carrito)); }, [carrito]);
   useEffect(() => { localStorage.setItem('datos_cliente_oishii', JSON.stringify(datosCliente)); }, [datosCliente]);
@@ -96,8 +96,7 @@ export default function DemoOishii() {
     if(datosCliente.comentarios) msg += `*NOTAS:* ${datosCliente.comentarios}\n`;
     msg += `----------------------------\n`;
     carrito.forEach(p => msg += `- ${p.cantidad}x ${p.nombre} ($${(p.precio * p.cantidad).toLocaleString('es-CL')})\n`);
-    msg += `----------------------------\n`;
-    msg += `Subtotal: $${subtotal.toLocaleString('es-CL')}\n`;
+    msg += `----------------------------\nSubtotal: $${subtotal.toLocaleString('es-CL')}\n`;
     if(datosCliente.metodoEntrega === 'domicilio') msg += `Envío: ${esEnvioGratis ? 'GRATIS' : '$1.000'}\n`;
     msg += `*TOTAL A PAGAR: $${totalFinal.toLocaleString('es-CL')}*`;
     window.open(`https://wa.me/56934555538?text=${encodeURIComponent(msg)}`, '_blank');
@@ -125,7 +124,7 @@ export default function DemoOishii() {
               <button onClick={() => setDarkMode(!darkMode)} className={`p-2.5 rounded-full transition-all ${darkMode ? 'bg-slate-800 text-yellow-500' : 'bg-slate-200 text-slate-600'}`}>
                 {darkMode ? <Sun size={18} /> : <Moon size={18} />}
               </button>
-              <button onClick={() => setModalAbierto(true)} className="relative p-2.5 bg-yellow-600 rounded-full text-[#001a3d] shadow-lg active:scale-90 transition-transform">
+              <button onClick={() => setModalAbierto(true)} className="relative p-2.5 bg-yellow-600 rounded-full text-[#001a3d] shadow-lg active:scale-95 transition-transform">
                 <ShoppingCart size={20} />
                 {carrito.length > 0 && <span className="absolute -top-1 -right-1 bg-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-yellow-600">{carrito.length}</span>}
               </button>
@@ -145,7 +144,8 @@ export default function DemoOishii() {
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto p-4 flex-grow w-full">
+      {/* CUERPO DE PRODUCTOS */}
+      <main className="max-w-4xl mx-auto p-4 flex-grow w-full min-h-[50vh]">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {productosBase.filter(p => filtroTipo === 'Todos' || p.tipo === filtroTipo).filter(p => p.nombre.toLowerCase().includes(busqueda.toLowerCase())).map(p => (
             <div key={p.id} className={`p-4 rounded-3xl border transition-all ${darkMode ? 'bg-[#001a3d]/40 border-slate-800/60' : 'bg-white border-slate-200 shadow-sm'} flex flex-col justify-between`}>
@@ -160,49 +160,49 @@ export default function DemoOishii() {
         </div>
       </main>
 
-      {/* FOOTER ADAPTATIVO (MÓVIL CENTRADO / PC HORIZONTAL) */}
-      <footer className={`${darkMode ? 'bg-[#000a14] border-slate-900' : 'bg-slate-100 border-slate-200'} py-16 px-6 border-t mt-10 transition-colors`}>
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+      {/* FOOTER OPTIMIZADO (MÓVIL CENTRADO / PC HORIZONTAL) */}
+      <footer className={`${darkMode ? 'bg-[#000a14] border-slate-900' : 'bg-slate-100 border-slate-200'} py-8 px-6 border-t mt-6 transition-colors`}>
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left items-start">
           
           {/* COLUMNA 1: IDENTIDAD */}
-          <div className="flex flex-col items-center md:items-start space-y-4">
-            <img src="pwa-192x192.png" alt="Logo" className="h-12 w-12 rounded-full border border-yellow-600/30 shadow-lg" />
-            <h3 className="font-black text-yellow-500 text-base uppercase tracking-widest">Oishii Sushi</h3>
-            <p className="text-[10px] font-black leading-relaxed text-slate-500 uppercase tracking-wider">
+          <div className="flex flex-col items-center md:items-start space-y-2">
+            <div className="flex items-center gap-2">
+              <img src="pwa-192x192.png" alt="Logo" className="h-8 w-8 rounded-full border border-yellow-600/30" />
+              <h3 className="font-black text-yellow-500 text-sm uppercase tracking-widest">Oishii Sushi</h3>
+            </div>
+            <p className="text-[9px] font-bold leading-tight text-slate-500 uppercase tracking-tighter max-w-[180px]">
               Auténtico Sabor Nikkei. Calidad Premium y frescura en cada bocado.
             </p>
           </div>
 
           {/* COLUMNA 2: INFORMACIÓN */}
-          <div className="space-y-4">
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Información</h4>
-            <div className="space-y-3">
-              <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black text-yellow-600 uppercase">Horario de Atención</span>
-                <span className="text-sm font-bold">Lun a Sáb: 11:00 - 23:00</span>
-              </div>
-              <p className="text-[10px] font-bold text-slate-500 flex items-center justify-center md:justify-start gap-2 uppercase">
-                <Bike size={14} /> Estacionamiento y Reparto
+          <div className="space-y-2">
+            <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Atención</h4>
+            <div className="text-[10px] font-black space-y-1">
+              <p className="text-yellow-600/80">LUN A SÁB: 11:00 - 23:00</p>
+              <p className="text-slate-500 flex items-center justify-center md:justify-start gap-1 uppercase">
+                <Bike size={12} /> Estacionamiento y Reparto
               </p>
             </div>
           </div>
 
           {/* COLUMNA 3: CONTACTO */}
-          <div className="space-y-6 flex flex-col items-center md:items-start">
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Contacto</h4>
-            <div className={`flex items-start gap-2 text-xs font-bold ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-              <MapPin size={18} className="text-yellow-600 shrink-0" />
-              <span className="uppercase tracking-tighter text-left">Vicuña Mackenna #790, Melipilla</span>
+          <div className="space-y-3 flex flex-col items-center md:items-start">
+            <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Contacto</h4>
+            <div className={`flex items-start gap-2 text-[10px] font-bold ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <MapPin size={14} className="text-yellow-600 shrink-0" />
+              <span className="uppercase text-left leading-tight">V. MACKENNA #790, MELIPILLA</span>
             </div>
-            <a href="tel:+56934555538" className="inline-flex items-center gap-3 px-6 py-3 bg-yellow-600 rounded-xl text-[#001a3d] hover:bg-yellow-500 transition-all active:scale-95 shadow-xl">
-              <Phone size={16} fill="currentColor" /> 
-              <span className="text-sm font-black tracking-tight">+56 9 3455 5538</span>
+            <a href="tel:+56934555538" className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-600 rounded-xl text-[#001a3d] hover:bg-yellow-500 transition-all active:scale-95 shadow-lg">
+              <Phone size={12} fill="currentColor" /> 
+              <span className="text-xs font-black">+56 9 3455 5538</span>
             </a>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto mt-12 pt-8 border-t border-slate-900/10 text-center">
-          <p className="text-[8px] font-black text-slate-700 uppercase tracking-[0.4em]">
+        {/* COPYRIGHT MINIMALISTA */}
+        <div className="max-w-4xl mx-auto mt-8 pt-4 border-t border-slate-900/10 text-center">
+          <p className="text-[7px] font-black text-slate-700 uppercase tracking-[0.3em] opacity-60">
             © 2026 OISHII SUSHI MELIPILLA | UTFSM INGENIERÍA
           </p>
         </div>
